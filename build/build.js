@@ -56,7 +56,7 @@ function setup() {
         var newInfo = data.results.map(function (char) {
             var info = {
                 img: loadImage(char.image),
-                name: char.image,
+                name: char.name,
                 state: char.status,
                 genre: char.gender,
                 posX: 0,

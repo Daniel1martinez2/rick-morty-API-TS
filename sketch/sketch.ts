@@ -1,7 +1,6 @@
 
 let characters:Character[] = [];
 
-
 function preload(){
   
 }
@@ -14,7 +13,7 @@ function setup() {
       const newInfo:Character[] = data.results.map((char:any) => {
         const info: CharacterType = {
           img: loadImage(char.image),
-          name: char.image,
+          name: char.name,
           state: char.status,
           genre: char.gender,
           posX: 0,
