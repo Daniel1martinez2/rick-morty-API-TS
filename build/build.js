@@ -1,93 +1,91 @@
-var ColorHelper = (function () {
-    function ColorHelper() {
+var Character = (function () {
+    function Character(props) {
+        this.img = props.img;
+        this.name = props.name;
+        this.state = props.state;
+        this.genre = props.genre;
+        this.posX = props.posX;
+        this.posY = props.posY;
     }
-    ColorHelper.getColorVector = function (c) {
-        return createVector(red(c), green(c), blue(c));
+    Character.prototype.draw = function () {
+        image(this.img, this.posX, this.posY, 20, 20);
     };
-    ColorHelper.rainbowColorBase = function () {
-        return [
-            color('red'),
-            color('orange'),
-            color('yellow'),
-            color('green'),
-            color(38, 58, 150),
-            color('indigo'),
-            color('violet')
-        ];
-    };
-    ColorHelper.getColorsArray = function (total, baseColorArray) {
-        var _this = this;
-        if (baseColorArray === void 0) { baseColorArray = null; }
-        if (baseColorArray == null) {
-            baseColorArray = ColorHelper.rainbowColorBase();
+    Character.prototype.clickOver = function () {
+        if ((mouseX > this.posX && mouseX < 20 + this.posX) && (mouseY > this.posY && mouseY < 20 + this.posY)) {
+            console.log(this.name);
         }
-        var rainbowColors = baseColorArray.map(function (x) { return _this.getColorVector(x); });
-        ;
-        var colours = new Array();
-        for (var i = 0; i < total; i++) {
-            var colorPosition = i / total;
-            var scaledColorPosition = colorPosition * (rainbowColors.length - 1);
-            var colorIndex = Math.floor(scaledColorPosition);
-            var colorPercentage = scaledColorPosition - colorIndex;
-            var nameColor = this.getColorByPercentage(rainbowColors[colorIndex], rainbowColors[colorIndex + 1], colorPercentage);
-            colours.push(color(nameColor.x, nameColor.y, nameColor.z));
-        }
-        return colours;
     };
-    ColorHelper.getColorByPercentage = function (firstColor, secondColor, percentage) {
-        var firstColorCopy = firstColor.copy();
-        var secondColorCopy = secondColor.copy();
-        var deltaColor = secondColorCopy.sub(firstColorCopy);
-        var scaledDeltaColor = deltaColor.mult(percentage);
-        return firstColorCopy.add(scaledDeltaColor);
-    };
-    return ColorHelper;
+    Object.defineProperty(Character.prototype, "setPosX", {
+        set: function (newPos) {
+            this.posX = newPos;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Character.prototype, "setPosY", {
+        set: function (newPos) {
+            this.posY = newPos;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Character.prototype, "getPosX", {
+        get: function () {
+            return this.posX;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Character.prototype, "getPosY", {
+        get: function () {
+            return this.posY;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return Character;
 }());
-var PolygonHelper = (function () {
-    function PolygonHelper() {
-    }
-    PolygonHelper.draw = function (numberOfSides, width) {
-        push();
-        var angle = TWO_PI / numberOfSides;
-        var radius = width / 2;
-        beginShape();
-        for (var a = 0; a < TWO_PI; a += angle) {
-            var sx = cos(a) * radius;
-            var sy = sin(a) * radius;
-            vertex(sx, sy);
-        }
-        endShape(CLOSE);
-        pop();
-    };
-    return PolygonHelper;
-}());
-var numberOfShapesControl;
-function setup() {
-    console.log("🚀 - Setup initialized - P5 is running");
-    createCanvas(windowWidth, windowHeight);
-    rectMode(CENTER).noFill().frameRate(30);
-    numberOfShapesControl = createSlider(1, 30, 15, 1).position(10, 10).style("width", "100px");
+var characters = [];
+function preload() {
 }
-function windowResized() {
-    resizeCanvas(windowWidth, windowHeight);
+function setup() {
+    fetch('https://rickandmortyapi.com/api/character')
+        .then(function (raw) { return raw.json(); })
+        .then(function (data) {
+        console.log(data.results);
+        var newInfo = data.results.map(function (char) {
+            var info = {
+                img: loadImage(char.image),
+                name: char.image,
+                state: char.status,
+                genre: char.gender,
+                posX: 0,
+                posY: 0,
+            };
+            return new Character(info);
+        });
+        characters = newInfo;
+        console.log(newInfo);
+    });
+    createCanvas(windowWidth, windowHeight);
 }
 function draw() {
-    background(0);
-    translate(width / 2, height / 2);
-    var numberOfShapes = numberOfShapesControl.value();
-    var colours = ColorHelper.getColorsArray(numberOfShapes);
-    var speed = (frameCount / (numberOfShapes * 30)) * 2;
-    for (var i = 0; i < numberOfShapes; i++) {
-        push();
-        var lineWidth = 8;
-        var spin = speed * (numberOfShapes - i);
-        var numberOfSides = 3 + i;
-        var width_1 = 40 * i;
-        strokeWeight(lineWidth);
-        stroke(colours[i]);
-        rotate(spin);
-        PolygonHelper.draw(numberOfSides, width_1);
-        pop();
+    background(255);
+    for (var i = 0; i < 5; i++) {
+        for (var j = 0; j < 4; j++) {
+            var currentValue = characters[j + (i * 5)];
+            if (currentValue) {
+                currentValue.setPosX = i * 20 + 200;
+                currentValue.setPosY = j * 20 + 50;
+                currentValue.draw();
+                characters[0];
+            }
+        }
     }
+}
+function mousePressed() {
+    characters.forEach(function (char) {
+        char.clickOver();
+    });
 }
 //# sourceMappingURL=build.js.map
