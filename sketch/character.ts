@@ -15,6 +15,7 @@ class Character{
   public genre: string;
   public posX: number;
   public posY: number;
+  public size: number;
 
   constructor(props:CharacterType){
     this.img = props.img;
@@ -23,14 +24,15 @@ class Character{
     this.genre = props.genre;
     this.posX = props.posX;
     this.posY = props.posY;
+    this.size = 100;
   }
 
   draw():void{
-    image(this.img, this.posX, this.posY, 20, 20)
+    image(this.img, this.posX, this.posY, this.size, this.size)
   }
 
   clickOver(){    
-    if((mouseX > this.posX && mouseX < 20+this.posX) && (mouseY > this.posY && mouseY < 20+  this.posY)){
+    if((mouseX > this.posX && mouseX < this.size+this.posX) && (mouseY > this.posY && mouseY < this.size+  this.posY)){
       console.log(this.name)
     }
   }

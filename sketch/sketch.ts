@@ -36,8 +36,8 @@ function draw() {
     for (let j = 0; j < 4; j++) {
       const currentValue = characters[j + (i*5)];
       if(currentValue){
-        currentValue.setPosX = i*20 + 200;
-        currentValue.setPosY = j*20 + 50;
+        currentValue.setPosX = i*(currentValue.size + 10) + 200;
+        currentValue.setPosY = j*(currentValue.size + 10) + 50;
         currentValue.draw()
         characters[0]
       }

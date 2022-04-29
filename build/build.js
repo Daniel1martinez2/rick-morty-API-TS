@@ -1,3 +1,6 @@
+function add(n1, n2) {
+    return n1 + n2;
+}
 var Character = (function () {
     function Character(props) {
         this.img = props.img;
@@ -6,12 +9,13 @@ var Character = (function () {
         this.genre = props.genre;
         this.posX = props.posX;
         this.posY = props.posY;
+        this.size = 100;
     }
     Character.prototype.draw = function () {
-        image(this.img, this.posX, this.posY, 20, 20);
+        image(this.img, this.posX, this.posY, this.size, this.size);
     };
     Character.prototype.clickOver = function () {
-        if ((mouseX > this.posX && mouseX < 20 + this.posX) && (mouseY > this.posY && mouseY < 20 + this.posY)) {
+        if ((mouseX > this.posX && mouseX < this.size + this.posX) && (mouseY > this.posY && mouseY < this.size + this.posY)) {
             console.log(this.name);
         }
     };
@@ -75,8 +79,8 @@ function draw() {
         for (var j = 0; j < 4; j++) {
             var currentValue = characters[j + (i * 5)];
             if (currentValue) {
-                currentValue.setPosX = i * 20 + 200;
-                currentValue.setPosY = j * 20 + 50;
+                currentValue.setPosX = i * (currentValue.size + 10) + 200;
+                currentValue.setPosY = j * (currentValue.size + 10) + 50;
                 currentValue.draw();
                 characters[0];
             }
